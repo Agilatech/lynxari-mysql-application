@@ -1,0 +1,22 @@
+{
+  "name": "@agilatech/lynxari-mysql-application",
+  "version": "1.0.0",
+  "description": "Lynxari Server App for inserting sensor data into MySQL DB",
+  "main": "loader.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "mysql": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Agilatech/lynxari-mysql-application.git"
+  },
+  "keywords": [
+    "Lynxari",
+    "MySQL"
+  ],
+  "author": "scotty <scott@agilatech.com> (https://agilatech.com)",
+  "license": "MIT"
+}

@@ -1,0 +1,43 @@
+{
+	"devices":[
+		{
+			"name":"MOCK",
+			"database":"lynxari",
+			"table":"mock",
+			"insertDelay":0,
+			"values":["value"],
+			"columns":["value"]
+		},
+		{
+			"name":"WIND",
+			"database":"wxstation",
+			"table":"wind",
+			"insertDelay":1000,
+			"values":["speed_mps", "direction_deg"],
+			"columns":["speed", "direction"]
+		}
+	],
+	"connections":[
+		{
+			"host":"localhost",
+			"user":"agt",
+			"password":"aC7ch6ppig6v4cqi49mx",
+			"socketPath":"/opt/local/var/run/mariadb/mysqld.sock"
+		},
+		{
+			"host":"mysql.example.com",
+			"user":"billybob",
+			"password":"7fjH4Uh6F83JUtE2xGWq",
+
+		}
+	]
+}
+
+
+
+
+
+
+
+
+
