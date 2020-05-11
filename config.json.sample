@@ -13,6 +13,7 @@
 			"database":"wxstation",
 			"table":"wind",
 			"insertDelay":1000,
+			"uniqueId": {serial: '54369385620'},
 			"values":["speed_mps", "direction_deg"],
 			"columns":["speed", "direction"]
 		}

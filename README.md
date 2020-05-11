@@ -9,7 +9,7 @@ Install in the same directory in which lynxari is installed. Create a config.jso
 
 
 ### Purpose
-The purpose of this application is to store device data outputs to MySQL databases. It queries the system for device data properties and streams, and writes the results to tables in databases as defined in the configuration.
+The purpose of this application is to store device data outputs to MySQL databases. It queries the system for device data properties and streams, and responds whenever data appears. Using the configuration to guide its behavior, it writes the results to a database table.
 
 
 ### Usage
@@ -29,8 +29,9 @@ The devices array defines the devices and their values to be saved. Each device 
 3. **table** : The name of the table in which to store the values.
 4. **insertDelay** : The amount of time in milliseconds which will pass waiting for other values to arrive. The purpose of this is to aggregate an insert statement with multiple values into one. It is usually preferable to insert three values in three different columns in a single INSERT rather than perform three separate inserts.
 5. **storeType** : One of 'insert' or 'update'. 'insert' creates a new row for every storage, where update replaces the last row.
-5. **values** : An array of values to store. These values are the names of the monitored values or value streams on the device.
-6. **columns** : An array of files in which to store the values. This array should correspond to the values array, in that it should contain the same number of elements, and the indicies for values aligns with those of the files (i.e. the 2nd value element will be sotred in the 2nd file element).
+6. **uniqueId** : Allows inserts and updates to be specified by one or more identifiers. The motivation for this parameter is to allow a single db table to be used for multiple different data feeds. uniqueId __must__ be an object, with the keys being identical to table columns, and the values the unique identifier. For INSERT statements, the unique identifiers are added to the column name and value lists. For UPDATE statements, each unique key and value are added as a WHERE statement. At this time, if more than one key:value pairs are specified, then the WHERE clause ANDs them all together. An OR operator may be added in the future.
+6. **values** : An array of values to store. These values are the names of the monitored values or value streams on the device.
+7. **columns** : An array of files in which to store the values. This array should correspond to the values array, in that it should contain the same number of elements, and the indicies for values aligns with those of the files (i.e. the 2nd value element will be sotred in the 2nd file element).
 
 There is no limit to the number of device objects which may appear in the **devices** array. 
 
@@ -53,6 +54,7 @@ A sample config file:
       "database":"lynxari",
       "table":"mock",
       "insertDelay":0,
+      "uniqueId":{"serial": 24562571},
       "values":["value"],
       "columns":["value"]
     },
@@ -82,7 +84,7 @@ A sample config file:
 ```
 
 ### Copyright
-Copyright © 2018 [Agilatech®](https://agilatech.com). All Rights Reserved.
+Copyright © 2018-2020 [Agilatech®](https://agilatech.com). All Rights Reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

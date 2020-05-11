@@ -122,7 +122,10 @@ module.exports = class Mysql {
 		else {
 			this.connection.query(sql, (err, result) => {
 				if (err) {
-					this.server.error("MySQL " + err + " -> " + sql);
+					this.server.error("MySQL " + err + " -> " + sql + " Restarting connection");
+					this.connection.end();
+					this.connection.release();
+					this.connect();
 				}
 			});
 		}
@@ -132,18 +135,30 @@ module.exports = class Mysql {
 
 		var sql = "INSERT INTO " + this.device.table + " (devicetime";
 
+		if (this.device.hasOwnProperty('uniqueId')) {
+			Object.keys(this.device.uniqueId).forEach(key => {
+				sql += ", " + key;
+			});
+		}
+
 		this.device.columns.forEach((col) => {
 			sql += ", " + col;
 		});
 
 		sql += ") VALUES (" + this.staging.timestamp;
 
+		if (this.device.hasOwnProperty('uniqueId')) {
+			Object.keys(this.device.uniqueId).forEach(key => {
+				sql += ", '" + this.device.uniqueId[key] + "'";
+			});
+		}
+
 		this.device.values.forEach((name, index) => {
 			if (this.staging.data[name] === undefined) {
 				this.staging.data[name] = 'NULL';
 			}
 
-			sql += ", " + this.staging.data[name];
+			sql += ", '" + this.staging.data[name] + "'";
 		});
 
 		sql += ");";
@@ -157,9 +172,21 @@ module.exports = class Mysql {
 
 		this.device.columns.forEach((col, index) => {
 			if (typeof this.staging.data[this.device.values[index]] != 'undefined') {
-				sql += ", " + col + " = " + this.staging.data[this.device.values[index]];
+				sql += ", " + col + " = '" + this.staging.data[this.device.values[index]] + "'";
 			}
 		});
+
+		if (this.device.hasOwnProperty('uniqueId')) {
+			sql += " WHERE ";
+
+			var first = true;
+			Object.keys(this.device.uniqueId).forEach(key => {
+				if (!first) { sql += " AND "; }
+				sql += key + "=" + "'" + this.device.uniqueId[key] + "'";
+				first = false;
+			});
+		}
+
 
 		sql += ";";
 
